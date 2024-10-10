@@ -1,1 +1,3 @@
-# intermask
+# InterMask: 3D Human Interaction Generation via Collaborative Masked Modelling
+
+coming soon...
