@@ -1,4 +1,4 @@
-# InterMask: 3D Human Interaction Generation via Collaborative Masked Modelling
+# InterMask: 3D Human Interaction Generation via Collaborative Masked Modeling
 
  <p align="center">
     <a href="https://gohar-malik.github.io/intermask/"><img alt="Project" src="https://img.shields.io/badge/-Project%20Page-lightgrey?logo=Google%20Chrome&color=informational&logoColor=white"></a>
