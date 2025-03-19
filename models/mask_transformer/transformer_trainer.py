@@ -149,8 +149,8 @@ class MaskTransformerTrainer:
 
         max_acc = -np.inf
         min_loss = np.inf
-        min_fid = [np.inf, np.inf, np.inf]
-        max_top1 = [-np.inf, -np.inf, -np.inf]
+        min_fid = np.inf
+        max_top1 = -np.inf
 
         if self.opt.do_eval:
             eval_file = pjoin(self.opt.eval_dir, 'evaluation_training.log')
@@ -225,45 +225,13 @@ class MaskTransformerTrainer:
                     self.logger.add_scalar('Test/FID', fid, epoch)
                     self.logger.add_scalar('Test/Matching', mat, epoch)
                     self.logger.add_scalar('Test/Top1', top1, epoch)
-                    min_fid, changed_fid = update_best_fid(min_fid, fid)
-                    max_top1, changed_top1 = update_best_top1(max_top1, top1)
-                    if changed_fid:
-                        self.save(pjoin(self.opt.model_dir, f'best_fid_{changed_fid}.tar'), epoch, it)
-                        print(f'Best {changed_fid} FID Model So Far!~')
-                    if changed_top1:
-                        self.save(pjoin(self.opt.model_dir, f'best_top1{changed_top1}.tar'), epoch, it)
-                        print(f'Best {changed_top1} Top1 Model So Far!~')
+                    if fid < min_fid:
+                        min_fid = fid
+                        self.save(pjoin(self.opt.model_dir, 'best_fid.tar'), epoch, it)
+                        print('Best FID Model So Far!~')
+                    if top1 > max_top1:
+                        max_top1 = top1
+                        self.save(pjoin(self.opt.model_dir, 'best_top1.tar'), epoch, it)
+                        print('Best Top1 Model So Far!~')
                 
             print('\n')
-
-def update_best_fid(min_fid, fid):
-    min1, min2, min3 = min_fid
-    if fid < min1:
-        min3, min2, min1 = min2, min1, fid
-        changed = 1
-    elif fid < min2:
-        min3, min2 = min2, fid
-        changed = 2
-    elif fid < min3:
-        min3 = fid
-        changed = 3
-    else:
-        changed = 0
-    
-    return [min1, min2, min3], changed
-
-def update_best_top1(max_top1, top1):
-    max1, max2, max3 = max_top1
-    if top1 > max1:
-        max3, max2, max1 = max2, max1, top1
-        changed = 1
-    elif top1 > max2:
-        max3, max2 = max2, top1
-        changed = 2
-    elif top1 > max3:
-        max3 = top1
-        changed = 3
-    else:
-        changed = 0
-    
-    return [max1, max2, max3], changed
