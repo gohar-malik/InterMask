@@ -1,0 +1,25 @@
+name: intermask
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.7.7
+  - pip
+  - ffmpeg=4.2.2
+  - pytorch=1.13.1=py3.7_cuda11.7_cudnn8.5.0_0
+  - pytorch-cuda=11.7
+  - pytorch-mutex=1.0=cuda
+  - torchaudio=0.13.1=py37_cu117
+  - torchvision=0.14.1=py37_cu117
+  - pip:
+    - git+https://github.com/openai/CLIP.git
+    - https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.3.0/en_core_web_sm-3.3.0.tar.gz#egg=en_core_web_sm
+    - einops==0.6.1
+    - gdown
+    - h5py
+    - matplotlib==3.3.1
+    - positional-encodings==6.0.3
+    - scipy==1.7.3
+    - sparsemax==0.1.9
+    - tensorboard==2.11.2
