@@ -77,7 +77,7 @@ def gen_motions(opt, file, texts, net, trans=None, motion_len=90):
     trans = trans.to(opt.device)
     trans.eval()
     
-    num_samples = 3
+    num_samples = 1
     motion_lens = torch.tensor([motion_len]*num_samples)
     ids_length = (motion_lens.detach().long().to(opt.device)//4)
     file = f"infer_{file.split('.')[0]}"
@@ -111,10 +111,8 @@ def gen_motions(opt, file, texts, net, trans=None, motion_len=90):
                                                     text[0], 
                                                     opt.vis_dir,
                                                     opt.npy_dir,
-                                                    opt.bvh_dir,
                                                     gen_file_name,
-                                                    foot_ik=True, 
-                                                    bvh=True)
+                                                    foot_ik=True)
                         elif opt.dataset_name == 'interx':
                             motion_output = motion_output.reshape(motion_output.shape[0], motion_output.shape[1], -1)
 
@@ -148,10 +146,8 @@ if __name__ == '__main__':
         main_dir = 'animation_infer'
         opt.vis_dir = pjoin(opt.save_root, main_dir, 'keypoint_mp4')
         opt.npy_dir = pjoin(opt.save_root, main_dir, 'keypoint_npy')
-        opt.bvh_dir = pjoin(opt.save_root, main_dir, 'bvh')
         os.makedirs(opt.vis_dir, exist_ok=True)
         os.makedirs(opt.npy_dir, exist_ok=True)
-        os.makedirs(opt.bvh_dir, exist_ok=True)
 
     elif opt.dataset_name == "interx":
         opt.vis_dir = pjoin(opt.save_root, 'animation_infer', 'smpl_npy')

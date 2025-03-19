@@ -61,4 +61,20 @@ Follow the instructions in the [InterGen github repo](https://github.com/tr3e/In
     ├── motions_processed
     └── split
 ```
+</details>
 
+## :rocket: Demo
+<details>
+
+```
+python infer.py --gpu_id 0 --dataset_name interhuman --name trans_default
+```
+
+The inference script obtains text prompts from the file `./prompts.txt`. The format is each text prompt per line. By default the script generateds motion of 3 seconds in length. In our work, motion is in 30 fps.
+
+The output files are stored under folder `./checkpoints/<dataset_name>/<name>/animation_infer/`, which is this case would be `./checkpoints/interhuman/trans_default/animation_infer/`. The output files are organized as follows:
+* `keypoint_npy`: generated motions with shape of (nframe, 22, 9) for each interacting individual, under subfolder.
+* `keypoint_mp4`: stick figure animation in mp4 format, with two viewpoints.
+
+We also apply naive foot ik to the generated motions, see files with prefix `ik_`. It sometimes works well, but sometimes will fail.
+</details>
