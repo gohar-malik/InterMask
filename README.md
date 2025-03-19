@@ -73,8 +73,72 @@ python infer.py --gpu_id 0 --dataset_name interhuman --name trans_default
 The inference script obtains text prompts from the file `./prompts.txt`. The format is each text prompt per line. By default the script generateds motion of 3 seconds in length. In our work, motion is in 30 fps.
 
 The output files are stored under folder `./checkpoints/<dataset_name>/<name>/animation_infer/`, which is this case would be `./checkpoints/interhuman/trans_default/animation_infer/`. The output files are organized as follows:
-* `keypoint_npy`: generated motions with shape of (nframe, 22, 9) for each interacting individual, under subfolder.
-* `keypoint_mp4`: stick figure animation in mp4 format, with two viewpoints.
+* `keypoint_npy`: generated motions with shape of (nframe, 22, 9) for each interacting individual.
+* `keypoint_mp4`: stick figure animation in mp4 format with two viewpoints.
 
 We also apply naive foot ik to the generated motions, see files with prefix `ik_`. It sometimes works well, but sometimes will fail.
 </details>
+
+## :space_invader: Train Your Own Models
+<details>
+
+
+**Note**: You have to train the VQ-VAE **BEFORE** training the Inter-M Transformers. They **CAN NOT** be trained simultaneously.
+
+### Train VQ-VAE
+```
+python train_vq.py --gpu_id 0 --dataset_name interhuman  --name vq_test 
+```
+
+### Train Inter-M Transformer
+```
+python train_transformer.py --gpu_id 0 --dataset_name interhuman --name trans_test --vq_name vq_test 
+```
+
+Selected arguments:
+* `--gpu_id`: GPU id.
+* `--dataset_name`: interaction dataset, `interhuman` for InterHuman and `interx` for Inter-X. 
+* `--name`: name your experiment. This will create a saving directory at `./checkpoints/<dataset_name>/<name>`.
+* `--vq_name`: when training Inter-M Transformer, you need to specify the name of previously trained vq-vae model for tokenization.
+* `--batch_size`: we use `256` for VQ-VAE training and `52` for the Inter-M Transformer.
+* `--do_eval`: to perform evaluations during training. **Note:** Make sure you have downloaded the evaluation models.
+* `--max_epoch`: number of total epochs to run. `50` for VQ-VAE and `500` for Inter-M Transformer.
+All the trained model checkpoints, logs and intermediate evaluations will be saved at `./checkpoints/<dataset_name>/<name>`.
+</details>
+
+## :book: Evaluation
+<details>
+
+### Evaluate VQ-VAE Reconstruction:
+InterHuman:
+```
+python eval.py --gpu_id 0 --use_trans False --dataset_name interhuman --name vq_default
+
+```
+
+### Evaluate Text to Interaction Generation:
+HumanML3D:
+```
+python eval.py --gpu_id 0 --dataset_name interhuman --name trans_default
+```
+
+Selected arguments
+* `--gpu_id`: GPU id.
+* `--use_trans`: whether to use transformer. default: `True`. Set `False` to perform inference on only the VQ-VAE.
+* `--dataset_name`: interaction dataset, `interhuman` for InterHuman and `interx` for Inter-X. 
+* `--name`: name of your trained model experiment.
+* `--which_epoch`: checkpoint name of the model: [`all`, `best_fid`, `best_top1`, `latest`, `finest`]
+* `--save_vis`: whether to save visualization results. default = `True`.
+* `--time_steps`: number of iterations for transformer inference. default: `20`.
+* `--cond_scales`: scale of classifer-free guidance. default: `2`.
+* `--topkr`: percentile of low score tokens to ignore while inference. default: `0.9`.
+
+The final evaluation results will be saved in `./checkpoints/<dataset_name>/<name>/eval/evaluation_<which_epoch>_ts<time_steps>_cs<cond_scales>_topkr<topkr>.log`
+
+</details>
+
+## Acknowlegements
+
+Components in this code are derived from the following open-source efforts:  
+
+[momask-codes](https://github.com/EricGuo5513/momask-codes/tree/main), [InterGen](https://github.com/tr3e/InterGen/tree/master), [Inter-X](https://github.com/liangxuy/Inter-X)
