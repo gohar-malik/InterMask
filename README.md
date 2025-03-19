@@ -7,4 +7,58 @@
    <a href="https://paperswithcode.com/sota/motion-synthesis-on-inter-x?p=intermask-3d-human-interaction-generation-via"><img alt="pwc_interx" src="https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/intermask-3d-human-interaction-generation-via/motion-synthesis-on-inter-x"></a>
   </p>
 
-code coming soon...
+![teaser_image](assets/teaser.jpg)
+If you find our code or paper helpful, please consider starring our repository and citing:
+```
+@inproceedings{javed2025intermask,
+  title={InterMask: 3D Human Interaction Generation via Collaborative Masked Modeling},
+  author={Muhammad Gohar Javed and Chuan Guo and Li Cheng and Xingyu Li},
+  booktitle={The Thirteenth International Conference on Learning Representations},
+  year={2025},
+  url={https://openreview.net/forum?id=ZAyuwJYN8N}
+}
+```
+
+## :round_pushpin: Preparation
+
+<details>
+  
+### 1. Setup Environment
+```
+conda env create -f environment.yml
+conda activate intermask
+```
+The code was tested on Python 3.7.7 and PyTorch 1.13.1
+
+### 2. Models and Dependencies
+
+#### Download Pre-trained Models
+```
+bash prepare/download_models.py
+```
+
+#### Download Evaluation Models
+For evaluation only. Obtained from the [InterGen github repo](https://github.com/tr3e/InterGen/tree/master).
+```
+bash prepare/download_evaluator.sh
+```
+
+The download scripts use the [gdown](https://github.com/wkentaro/gdown) package. If you face problems try running the following command and try again. Solution is from this [github issue](https://github.com/wkentaro/gdown/issues/110#issuecomment-913561232).
+```
+rm -f ~/.cache/gdown/cookies.json
+```
+
+### 3. Get Data
+
+#### InterHuman
+Follow the instructions in the [InterGen github repo](https://github.com/tr3e/InterGen/tree/master?tab=readme-ov-file#2-get-data) to download the InterHuman dataset and place it in the `./data/InterHuman/` foler and unzip the `motions_processed.zip` archive such that the directory structure looks like:
+```
+./data
+├── InterHuman
+    ├── annots
+    ├── LICENSE.md
+    ├── motions
+    ├── motions_processed
+    └── split
+```
+
