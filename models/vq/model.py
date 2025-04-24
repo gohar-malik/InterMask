@@ -33,15 +33,20 @@ class RVQVAE(nn.Module):
             filter_s = None
             stride_s = None
             spatial_upsample = (2.2, 2)
+            gcn=True
+
         elif self.dataset_name == "interx":
             filter_s = 6
             stride_s = 3
             spatial_upsample = (3.5, 3.3)
+            gcn=False
 
         self.encoder = Encoder(args, input_dim, output_emb_width, down_t, stride_t, width, depth,
-                               dilation_growth_rate, activation=activation, norm=norm, filter_s=filter_s, stride_s=stride_s)
+                               dilation_growth_rate, activation=activation, norm=norm, 
+                               filter_s=filter_s, stride_s=stride_s, gcn=gcn)
         self.decoder = Decoder(args, input_dim, output_emb_width, down_t, stride_t, width, depth,
-                               dilation_growth_rate, activation=activation, norm=norm, spatial_upsample=spatial_upsample)
+                               dilation_growth_rate, activation=activation, norm=norm, 
+                               spatial_upsample=spatial_upsample, gcn=gcn)
         
         rvqvae_config = {
             'num_quantizers': args.num_quantizers,
