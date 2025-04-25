@@ -13,7 +13,7 @@ def arg_parse():
     parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
     parser.add_argument('--which_epoch', type=str, default="best_fid", help='Checkpoint you want to use, {latest, best_fid, etc}')
     parser.add_argument('--batch_size', type=int, default=96, help='Batch size')
-    parser.add_argument('--save_vis', type=distutils.util.strtobool, default=True, help='save visualization')
+    parser.add_argument('--save_vis', type=distutils.util.strtobool, default=False, help='save visualization')
     parser.add_argument('--gen_react', action='store_true', help='generate reaction')
 
     ## eval settings

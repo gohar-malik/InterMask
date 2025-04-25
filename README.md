@@ -34,7 +34,7 @@ The code was tested on Python 3.7.7 and PyTorch 1.13.1
 
 #### Download Pre-trained Models
 ```
-bash prepare/download_models.py
+python prepare/download_models.py
 ```
 
 #### Download Evaluation Models
